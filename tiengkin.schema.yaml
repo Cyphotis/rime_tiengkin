@@ -1,0 +1,186 @@
+# Rime schema
+# encoding: utf-8
+
+schema:
+  name: 𡦂喃㗂京中國（壯拼式）
+  schema_id: tiengkin
+  version: "2023.06.13"
+  author:
+    - hulenkius <hulenkius@gmail.com>
+    - Keepout2010 <Keepout2010@163.com>
+  description: |
+    《中國京語詞典》字頭發音仿壯拼式轉寫輸入
+    需要 Nom Na Tong 字體私用區支持
+    聲調用 telex 寫法，可省略
+    無韻尾a及所有aː>a　其餘a>ea
+    iː=iːə>ie　iː=iə>ie　ɯː=ɯə>ye
+    ɛ>ea　ɔ>oa　ɔː >ooa
+    ɯ>y　ə>eo　ɤ>oe
+    ɣ>ɡ　ŋ>ng
+    ȵ>nh　ɬ>sh
+    ts>c　tsh>ch
+  dependencies:
+    - cangjie5
+
+switches:
+  - name: ascii_mode
+    reset: 0
+    states: [ 中文, 西文 ]
+  - name: full_shape
+    states: [ 半角, 全角 ]
+  - name: ascii_punct
+    states: [ 。，, ．， ]
+
+engine:
+  processors:
+    - ascii_composer
+    - recognizer
+    - key_binder
+    - speller
+    - punctuator
+    - selector
+    - navigator
+    - express_editor
+  segmentors:
+    - ascii_segmentor
+    - matcher
+    - abc_segmentor
+    - punct_segmentor
+    - fallback_segmentor
+  translators:
+    - punct_translator
+    - r10n_translator
+    - reverse_lookup_translator
+  filters:
+    - uniquifier
+
+speller:
+  alphabet: zyxwvutsrqponmlkjihgfedcba
+  delimiter: " '"
+  algebra:
+    - xform/(\*).+$//
+    # 將所有拼式先轉爲完整壯拼
+    - xform/aa/A/
+    - xform/a([12356])/A$1/ #無韵尾a
+    - xform/a/ae/
+    - xform/A/a/
+    - xform/x/q/
+    - xform/wy/ye/
+    - xform/ww/ye/
+    - xform/^v/V/
+    - xform/^vv/Veo/
+    - xform/vv/eo/
+    - xform/v([12356])/eo$1/
+    - xform/v/oe/
+    - xform/V/v/
+    - xform/uy/ue/
+    - xform/uu/ue/
+    - xform/ts/c/
+    - xform/ooo/OOA/
+    - xform/oo/oa/
+    - xform/OOA/ooa/
+    - xform/lh/sh/
+    - xform/iy/ie/
+    - xform/ii/ie/
+    - xform/ee/ea/
+    - xform/y/eo/
+    - xform/W/w/
+    # 省略喉塞
+    - derive/^q//
+    # 省略聲調
+    - derive/1//
+    - derive/2//
+    - derive/3//
+    - derive/5//
+    - derive/6//
+    - derive/7//
+    - derive/8//
+    # telex 聲調轉寫
+    - derive/1/z/
+    - derive/2/f/
+    - derive/3/r/
+    - derive/3/x/
+    - derive/5/s/
+    - derive/6/j/
+    - derive/7/s/
+    - derive/8/f/
+    - derive/\’//
+    - derive/p8/b/
+    - derive/t8/d/
+    - derive/k8/g/
+    - abbrev/^([a-z]).+$/$1/	#首字母簡拼
+
+translator:
+  dictionary: tiingkin
+  prism: tiingkin
+  spelling_hints: 1
+  enable_completion: true
+  preedit_format:
+    - xform/(\*).+$//
+    - xform/\’//
+  comment_format:
+    #轉爲壯拼
+    - xform/aa/A/
+    - xform/a([12356])/A$1/ #無韵尾a
+    - xform/a/ae/
+    - xform/A/a/
+    - xform/x/q/
+    - xform/wy/ye/
+    - xform/ww/ye/
+    - xform/^v/V/
+    - xform/^vv/Veo/
+    - xform/vv/eo/
+    - xform/v([12356])/eo$1/
+    - xform/v/oe/
+    - xform/V/v/
+    - xform/uy/ue/
+    - xform/uu/ue/
+    - xform/ts/c/
+    - xform/ooo/OOA/
+    - xform/oo/oa/
+    - xform/OOA/ooa/
+    - xform/lh/sh/
+    - xform/iy/ie/
+    - xform/ii/ie/
+    - xform/ee/ea/
+    - xform/y/eo/
+    - xform/W/w/
+    # 轉寫聲調
+    - xform/1/ᶻ/
+    - xform/2/ᶠ/
+    - xform/3/ʳ/
+    - xform/5/ˢ/
+    - xform/6/ʲ/
+    - xform/7/ˢ/
+    - xform/8/ʲ/
+    - xform/\’//
+    # 配合容錯
+    - xform/^(.*)$/‹$1›
+    - xform/((\*).+)›/›\ $1/
+    - xform/(\*).+$// #如果保留音標運算會變得複雜，故隱去
+    
+reverse_lookup:
+  dictionary: cangjie5
+  enable_completion: true
+  prefix: "`"
+  suffix: "'"
+  tips: 〔倉頡〕
+  preedit_format:
+    - "xlit|abcdefghijklmnopqrstuvwxyz|日月金木水火土竹戈十大中一弓人心手口尸廿山女田難卜符|"
+  comment_format:
+    - xform/^(.*)$/$1
+    - xform/((\*).+)/$1/
+  
+punctuator:
+  import_preset: default
+
+key_binder:
+  import_preset: default
+
+recognizer:
+  import_preset: default
+  patterns:
+    reverse_lookup: "`[a-z]*'?$"
+    
+style:
+  font_face: "Nom Na Tong"
