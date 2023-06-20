@@ -9,11 +9,11 @@ schema:
     - hulenkius <hulenkius@gmail.com>
     - Keepout2010 <Keepout2010@163.com>
   description: |
-    《中國京語詞典》字頭發音仿壯拼式轉寫輸入
+    《中國京語詞典》字頭元音發音仿壯拼式轉寫輸入
     需要 Nom Na Tong 字體私用區支持
     聲調用 telex 寫法，可省略
     無韻尾a及所有aː>a　其餘a>ea
-    iː=iːə>ie　iː=iə>ie　ɯː=ɯə>ye
+    uː=uə>ue　ɯː=ɯə>ye　iː=iə>ie
     ɛ>ea　ɔ>oa　ɔː >ooa
     ɯ>y　ə>eo　ɤ>oe
     ɣ>ɡ　ŋ>ng
@@ -84,6 +84,7 @@ speller:
     - xform/ii/ie/
     - xform/ee/ea/
     - xform/y/eo/
+    - xform/w/y/
     - xform/W/w/
     # 省略喉塞
     - derive/^q//
