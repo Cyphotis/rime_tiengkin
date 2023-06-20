@@ -1,4 +1,4 @@
-# rime_tiingkin
+# rime_tiengkin
 
 RIME輸入方案：𡦂喃㗂京中國
 
